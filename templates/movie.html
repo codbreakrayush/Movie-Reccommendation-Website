@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie reccomendation</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,300,700" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/style-starter.css')}}" rel="stylesheet">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+
+        /* @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css); */
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #afd0eb;
+            background-image: linear-gradient(to bottom right, #07497b, white);
+        }
+
+        a {
+            text-decoration: none;
+            color: #5C7FB8
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .movie-card {
+            font: 14px/22px "Lato", Arial, sans-serif;
+            color: #F0F0ED;
+            padding: 40px 0;
+        }
+
+        .w3l-breadcrumbs {
+            padding-top: 20px;
+        }
+
+        .container1 {
+            margin: 0 auto;
+            width: 829px;
+            -height: 22px;
+            background: #0a0a00;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .container1 img {
+            height: 300px;
+            width: 228px;
+        }
+
+        .hero {
+            height: 342px;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+
+        }
+
+        .hero:before {
+            content: '';
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            background: #e0dab5;
+            background: url("{{movie.img_url}}");
+            /* background-repeat: no-repeat; */
+            z-index: -1;
+
+            transform: skewY(-2.2deg);
+            transform-origin: 0 0;
+
+            //chrome antialias fix
+            -webkit-backface-visibility: hidden;
+
+        }
+
+        .cover {
+            position: absolute;
+            top: 160px;
+            left: 40px;
+            z-index: 2;
+        }
+
+        .details {
+
+            padding: 190px 0 0 280px;
+
+
+            .title1 {
+                color: white;
+                font-size: 44px;
+                margin-bottom: 13px;
+                position: relative;
+            }
+
+            span {
+                position: absolute;
+                top: 3px;
+                margin-left: 12px;
+                background: #C4AF3D;
+                border-radius: 5px;
+                color: #544C21;
+                font-size: 14px;
+                padding: 0px 4px;
+            }
+
+
+            .title2 {
+                color: #C7C1BA;
+                font-size: 23px;
+                font-weight: 300;
+                margin-bottom: 15px;
+            }
+
+
+            .likes {
+                margin-left: 24px;
+            }
+
+
+            .likes:before {
+                content: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/icon_like.png");
+                position: relative;
+                top: 2px;
+                padding-right: 7px;
+            }
+
+        }
+
+        .description {
+
+            bottom: 0px;
+            height: 200px;
+            font-size: 16px;
+            line-height: 26px;
+            color: #B1B0AC;
+
+        }
+
+        .column1 {
+            padding-left: 50px;
+            padding-top: 120px;
+            width: 220px;
+            float: left;
+            text-align: center;
+        }
+
+        .tag {
+            background: #ffffff36;
+            border-radius: 5px;
+            padding: 6px 6px;
+            font-size: 14px;
+            margin-right: 4px;
+            line-height: 35px;
+            cursor: pointer;
+        }
+
+        .tag:hover {
+            background: #ddd;
+        }
+
+        .column2 {
+            padding-left: 41px;
+            padding-top: 30px;
+            margin-left: 20px;
+            width: 480px;
+            float: left;
+        }
+
+        .avatars {
+            margin-top: 23px;
+
+            img {
+                cursor: pointer;
+            }
+
+            img:hover {
+                opacity: 0.6;
+            }
+
+            a:hover {
+                text-decoration: none;
+            }
+        }
+
+        /* //star rating stuff via: https://codepen.io/jamesbarnett/pen/vlpkh/ */
+
+        fieldset,
+        label {
+            margin: 0;
+            padding: 0;
+        }
+
+        /****** Style Star Rating Widget *****/
+
+        .rating {
+            border: none;
+            float: left;
+        }
+
+        .rating>input {
+            display: none;
+        }
+
+        .rating>label:before {
+            margin: 5px;
+            margin-top: 0;
+            font-size: 1em;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+        }
+
+        .rating>.half:before {
+            content: "\f089";
+            position: absolute;
+        }
+
+        .rating>label {
+            color: #ddd;
+            float: right;
+        }
+
+        /***** CSS Magic to Highlight Stars on Hover *****/
+
+        .rating>input:checked~label,
+        /* show gold star when clicked */
+        .rating:not(:checked)>label:hover,
+        /* hover current star */
+        .rating:not(:checked)>label:hover~label {
+            color: #FFD700;
+        }
+
+        /* hover previous stars in list */
+
+        .rating>input:checked+label:hover,
+        /* hover current star when changing rating */
+        .rating>input:checked~label:hover,
+        .rating>label:hover~input:checked~label,
+        /* lighten current selection */
+        .rating>input:checked~label:hover~label {
+            color: #FFED85;
+        }
+
+        //tooltip stuff via: https://codepen.io/peiche/pen/JaftA
+
+        a[data-tooltip] {
+            position: relative;
+        }
+
+        a[data-tooltip]::before,
+        a[data-tooltip]::after {
+            position: absolute;
+            display: none;
+            opacity: 0.85;
+        }
+
+        a[data-tooltip]::before {
+            /*
+   * using data-tooltip instead of title so we 
+   * don't have the real tooltip overlapping
+   */
+            content: attr(data-tooltip);
+            background: #000;
+            color: #fff;
+            font-size: 13px;
+            padding: 5px;
+            border-radius: 5px;
+            /* we don't want the text to wrap */
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        a[data-tooltip]::after {
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            content: '';
+        }
+
+        a[data-tooltip]:hover::before,
+        a[data-tooltip]:hover::after {
+            display: block;
+        }
+
+        /** positioning **/
+
+        /* top tooltip */
+        a[data-tooltip][data-placement="top"]::before {
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 40px;
+        }
+
+        a[data-tooltip][data-placement="top"]::after {
+            border-top-color: #000;
+            border-bottom: none;
+            bottom: 50px;
+            left: 20px;
+            margin-bottom: 4px;
+        }
+
+        #submit {
+            border: none;
+            background-color: #544C21;
+            color: #FFD700;
+            /* background: transparent;  */
+            margin-top: 0px;
+            margin-left: 0px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w3l-breadcrumbs">
+        <nav id="breadcrumbs" class="breadcrumbs">
+            <div class="container page-wrapper">
+                <a href="/">Home</a> » <span class="breadcrumb_last" aria-current="page">{{movie.original_title}}</span>
+            </div>
+        </nav>
+    </div>
+    <div class="movie-card">
+
+        <div class="container1">
+            {% set link = movie.homepage %}
+            <a href={{link}} target="_blank"><img src={{movie.img_url}} alt="cover" class="cover" /></a>
+
+            <div class="hero">
+
+                <div class="details">
+
+                    <div class="title1">{{movie.original_title}}</div>
+
+                    <div class="title2">{{movie.tagline}}</div>
+                    {% set link2 = '/movie/' + movie.id|string() %}
+                    <form class="rating" name="myForm" action={{link2}} method="post" onsubmit="">
+                        <!-- <fieldset class="rating"> -->
+                        <input type="radio" id="star10" name="rating" value="10" /><label class="full" for="star10"
+                            title="Awesome - 10 stars"></label>
+                        <input type="radio" id="star9" name="rating" value="9" /><label class="full" for="star9"
+                            title="Awesome - 9 stars"></label>
+                        <!-- <input type="radio" id="star4half" name="rating" value="9" /><label class="half"
+                                for="star4half" title="Pretty good - 9 stars"></label> -->
+                        <input type="radio" id="star8" name="rating" value="8" checked /><label class="full" for="star8"
+                            title="Pretty good - 8 stars"></label>
+                        <input type="radio" id="star7" name="rating" value="7" /><label class="full" for="star7"
+                            title="Pretty good - 7 stars"></label>
+                        <!-- <input type="radio" id="star3half" name="rating" value="7" /><label class="half"
+                                    for="star3half" title="Meh - 7 stars"></label> -->
+                        <input type="radio" id="star6" name="rating" value="6" /><label class="full" for="star6"
+                            title="Meh - 6 stars"></label>
+                        <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
+                            title="Meh - 5 stars"></label>
+                        <!-- <input type="radio" id="star2half" name="rating" value="5" /><label class="half"
+                                        for="star2half" title="Kinda bad - 5 stars"></label> -->
+                        <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"
+                            title="Kinda bad - 4 stars"></label>
+                        <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"
+                            title="Kinda bad - 3 stars"></label>
+                        <!-- <input type="radio" id="star1half" name="rating" value="3" /><label class="half"
+                                            for="star1half" title="Meh - 3 stars"></label> -->
+                        <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"
+                            title="Sucks big time - 2 star"></label>
+                        <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"
+                            title="Sucks big time - 1 stars"></label>
+                        <!-- <input type="radio" id="starhalf" name="rating" value="1" /><label class="half"
+                            for="starhalf" title="Sucks big time - 1 stars"></label> -->
+                        <!-- </fieldset> -->
+                        <button type="submit" id="submit"><strong>Rate</strong></button>
+                    </form>
+                </div> <!-- end details -->
+
+            </div> <!-- end hero -->
+
+            <div class="description">
+
+                <div class="column1">
+                    {% for g in genre %}
+                    <span class="tag">{{g}}</span>
+                    {% endfor %}
+                </div> <!-- end column1 -->
+
+                <div class="column2">
+
+                    <p>{{movie.overview[0:350]}}...</p>
+
+                </div> <!-- end avatars -->
+
+
+
+            </div> <!-- end column2 -->
+        </div> <!-- end description -->
+
+
+    </div> <!-- end container -->
+    </div> <!-- end movie-card -->
+</body>
+
+</html>

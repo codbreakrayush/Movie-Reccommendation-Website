@@ -1,0 +1,213 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<div class="w3l-breadcrumbs">
+	<nav id="breadcrumbs" class="breadcrumbs">
+		<div class="container page-wrapper">
+			<a href="/">Home</a> »
+	</nav>
+</div>
+<section class="w3l-grids">
+	<div class="grids-main py-5">
+		<div class="container py-lg-3">
+			<div class="headerhny-title">
+				<div class="w3l-title-grids">
+					<div class="headerhny-left">
+						<h3 class="hny-title">Reccomendations</h3>
+					</div>
+					<div class="headerhny-right text-lg-right">
+						<h4><a class="show-title" href="/reccomendations">Show all</a></h4>
+					</div>
+				</div>
+			</div>
+			<div class="owl-three owl-carousel owl-theme">
+				{% for r in r_movie %}
+				{% set link = 'movie/' + r.id|string() %}
+				<div class="item vhny-grid">
+					<div class="box16 mb-0">
+						<a href={{link}}>
+							<figure>
+								<img class="img-fluid" src={{r.img_url}} alt="">
+							</figure>
+							<div class="box-content">
+
+								<h4> <span class="post"><span class="fa fa-clock-o"> </span> {{r.runtime}}min
+
+									</span>
+
+									
+								</h4>
+							</div>
+							
+						</a>
+					</div>
+					<h3> <a class="title-gd" href={{link}}></a>{{r.original_title}}</h3>
+					<p>{{r.overview[0:50]}}</p>
+
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+	</div>
+</section>
+<section class="w3l-grids">
+	<div class="grids-main py-5">
+		<div class="container py-lg-3">
+			<div class="headerhny-title">
+				<div class="w3l-title-grids">
+					<div class="headerhny-left">
+						<h3 class="hny-title">Popular Movies</h3>
+					</div>
+					<div class="headerhny-right text-lg-right">
+						<h4><a class="show-title" href="/popular">Show all</a></h4>
+					</div>
+				</div>
+			</div>
+			<div class="owl-three owl-carousel owl-theme">
+				{% for m in p_movie %}
+				{% set link = 'movie/' + m.id|string() %}
+				<div class="item vhny-grid">
+					<div class="box16 mb-0">
+						<a href={{link}}>
+							<figure>
+								<img class="img-fluid" src={{m.img_url}} alt="">
+							</figure>
+							<div class="box-content">
+
+								<h4> <span class="post"><span class="fa fa-clock-o"> </span> {{m.runtime}}min
+
+									</span>
+
+								</h4>
+							</div>
+							
+						</a>
+					</div>
+					<h3> <a class="title-gd" href={{link}}></a>{{m.original_title}}</h3>
+					<p>{{m.overview[0:70]}}</p>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+	</div>
+</section>
+
+
+<section class="w3l-albums py-5" id="projects">
+	<div class="container py-lg-4">
+		<div class="row">
+			<div class="col-lg-12 mx-auto">
+				<!--Horizontal Tab-->
+				<div id="parentHorizontalTab">
+					<ul class="resp-tabs-list hor_1">
+						<li>Trending Movies</li>
+						<li>Reccomended Movies</li>
+						<li>Popular Movies</li>
+						<div class="clear"></div>
+					</ul>
+					<div class="resp-tabs-container hor_1">
+						<div class="albums-content">
+							<div class="row">
+								<!--/set1-->
+								{% for t in t_movie %}
+                				{% set link = 'movie/' + t.id|string() %}
+								<div class="col-lg-4 new-relise-gd mt-lg-0 mt-0">
+									<div class="slider-info">
+										<div class="img-circle">
+											<a href={{link}}><img
+													src={{t.img_url}}
+													class="img-fluid" alt="author image">
+											</a>
+										</div>
+										<div class="message">
+											<p>English</p>
+											<a class="author-book-title" href={{link}}>{{t.original_title}}</a>
+											<h4> <span class="post"><span class="fa fa-clock-o"> </span> {{t.runtime}}min
+
+												</span>
+
+												
+											</h4>
+										</div>
+									</div>
+
+								</div>
+								{% endfor %}
+								<!--//set1-->
+							</div>
+						</div>
+						<div class="albums-content">
+							<div class="row">
+								<!--/set1-->
+								
+								<!--//set1-->
+								<!--/set2-->
+								{% for r in r_movie %}
+                				{% set link = 'movie/' + r.id|string() %}
+								<div class="col-lg-4 new-relise-gd mt-lg-0 mt-0">
+									<div class="slider-info">
+										<div class="img-circle">
+											<a href={{link}}><img
+													src={{r.img_url}}
+													class="img-fluid" alt="author image">
+											</a>
+										</div>
+										<div class="message">
+											<p>English</p>
+											<a class="author-book-title" href={{link}}>{{r.original_title}}</a>
+											<h4> <span class="post"><span class="fa fa-clock-o"> </span>{{r.runtime}}min
+
+												</span>
+
+					
+											</h4>
+										</div>
+									</div>
+
+								</div>
+								{% endfor %}
+								
+								<!--//set2-->
+							</div>
+						</div>
+						<div class="albums-content">
+							<div class="row">
+								<!--/set3-->
+								{% for p in p_movie %}
+                				{% set link = 'movie/' + p.id|string() %}
+								<div class="col-lg-4 new-relise-gd mt-lg-0 mt-0">
+									<div class="slider-info">
+										<div class="img-circle">
+											<a href={{link}}><img
+													src={{p.img_url}}
+													class="img-fluid" alt="author image">
+											</a>
+										</div>
+										<div class="message">
+											<p>English</p>
+											<a class="author-book-title" href={{link}}>{{p.original_title}}</a>
+											<h4> <span class="post"><span class="fa fa-clock-o"> </span> {{p.runtime}}min
+
+												</span>
+
+			
+											</h4>
+										</div>
+									</div>
+
+								</div>
+								{% endfor %}
+								<!--//set3-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- //tabs-->
+{% endblock %}

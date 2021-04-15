@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="w3l-breadcrumbs">
+    <nav id="breadcrumbs" class="breadcrumbs">
+        <div class="container page-wrapper">
+            <a href="/">Home</a> » <span class="breadcrumb_last" aria-current="page">Popular Movies</span>
+        </div>
+    </nav>
+</div>
+<section class="w3l-grids">
+    <div class="grids-main py-5">
+        <div class="container py-lg-3">
+            <div class="headerhny-title">
+                <div class="w3l-title-grids">
+                    <div class="headerhny-left">
+                        <h3 class="hny-title">Popular Movies</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="w3l-populohny-grids">
+                {% for m in movie %}
+                {% set link = 'movie/' + m.id|string() %}
+                <div class="item vhny-grid">
+                    <div class="box16">
+                        <a href="{{link}}">
+                            <figure>
+                                <img class="img-fluid" src={{m.img_url}} alt="">
+                            </figure>
+                            <div class="box-content">
+                                <h3 class="title">{{m.original_title}}</h3>
+                                <h4> <span class="post"><span class="fa fa-clock-o"> </span>{{m.runtime}}
+
+                                    </span>
+
+                                    
+                                </h4>
+                            </div>
+                            <!-- <span class="fa fa-play video-icon" aria-hidden="true"></span> -->
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
